@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :system_requirement do
     name { "MyString" }
-    operational_system { "MyString" }
+    operating_system { "MyString" }
     storage { "MyString" }
     processor { "MyString" }
     memory { "MyString" }
-    video_board { "MyString" }
+    graphics_card { "MyString" }
   end
 end
