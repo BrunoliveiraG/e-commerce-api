@@ -1,0 +1,6 @@
+
+en:
+  activerecord:
+    errors:
+      messages:
+        future_date: "Must have a future due date"
