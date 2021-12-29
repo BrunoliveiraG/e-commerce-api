@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'home', type: :request do
@@ -5,7 +7,7 @@ describe 'home', type: :request do
 
   it 'tests home' do
     get '/admin/v1/home', headers: auth_header(user)
-    expect(body_json).to eq({ 'message' => "Uhul!" })
+    expect(body_json).to eq({ 'message' => 'Uhul!' })
   end
 
   it 'tests home' do

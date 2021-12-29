@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin::V1::Categories as :client", type: :request do
+RSpec.describe 'Admin::V1::Categories as :client', type: :request do
   let(:user) { create(:user, profile: :client) }
 
   context 'GET /categories' do
@@ -22,7 +24,7 @@ RSpec.describe "Admin::V1::Categories as :client", type: :request do
 
   context 'PATCH /categories/:id' do
     let(:url) { "/admin/v1/categories/#{category.id}" }
-    let (:category) { create(:category) }
+    let(:category) { create(:category) }
 
     before(:each) { patch url, headers: auth_header(user) }
 
@@ -31,7 +33,7 @@ RSpec.describe "Admin::V1::Categories as :client", type: :request do
 
   context 'DELETE /categories/:id' do
     let(:url) { "/admin/v1/categories/#{category.id}" }
-    let (:category) { create(:category) }
+    let(:category) { create(:category) }
 
     before(:each) { delete url, headers: auth_header(user) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Coupon < ApplicationRecord
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :status, presence: true

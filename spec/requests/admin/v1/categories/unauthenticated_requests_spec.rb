@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin::V1::Categories without authentication", type: :request do
-
+RSpec.describe 'Admin::V1::Categories without authentication', type: :request do
   context 'GET /categories' do
     let(:url) { '/admin/v1/categories' }
     let!(:categories) { create_list(:category, 5) }
@@ -21,7 +22,7 @@ RSpec.describe "Admin::V1::Categories without authentication", type: :request do
 
   context 'PATCH /categories/:id' do
     let(:url) { "/admin/v1/categories/#{category.id}" }
-    let (:category) { create(:category) }
+    let(:category) { create(:category) }
 
     before(:each) { patch url }
 
@@ -30,7 +31,7 @@ RSpec.describe "Admin::V1::Categories without authentication", type: :request do
 
   context 'DELETE /categories/:id' do
     let(:url) { "/admin/v1/categories/#{category.id}" }
-    let (:category) { create(:category) }
+    let(:category) { create(:category) }
 
     before(:each) { delete url }
 

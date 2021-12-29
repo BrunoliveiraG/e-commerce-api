@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Coupon, type: :model do
@@ -28,5 +30,4 @@ RSpec.describe Coupon, type: :model do
     subject.valid?
     expect(subject.errors.keys).to_not include :due_date
   end
-
 end

@@ -1,28 +1,30 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin::V1::Categories as :admin", type: :request do
+RSpec.describe 'Admin::V1::Categories as :admin', type: :request do
   let(:user) { create(:user) }
 
-  context "GET /categories" do
-    let(:url) { "/admin/v1/categories" }
+  context 'GET /categories' do
+    let(:url) { '/admin/v1/categories' }
     let!(:categories) { create_list(:category, 5) }
 
-    it "returns all Categories" do
+    it 'returns all Categories' do
       get url, headers: auth_header(user)
-      expect(body_json['categories']).to contain_exactly *categories.as_json(only: %i(id name))
+      expect(body_json['categories']).to contain_exactly(*categories.as_json(only: %i[id name]))
     end
 
-    it "returns success status" do
+    it 'returns success status' do
       get url, headers: auth_header(user)
       expect(response).to have_http_status(:ok)
     end
   end
 
   context 'POST /categories' do
-    let(:url) { "/admin/v1/categories" }
+    let(:url) { '/admin/v1/categories' }
 
     context 'with valid params' do
-      let (:category_params) { { category: attributes_for(:category) }.to_json }
+      let(:category_params) { { category: attributes_for(:category) }.to_json }
 
       it 'adds a new Category' do
         expect do
@@ -32,7 +34,7 @@ RSpec.describe "Admin::V1::Categories as :admin", type: :request do
 
       it 'returns last added Category' do
         post url, headers: auth_header(user), params: category_params
-        expect_category = Category.last.as_json(only: %i(id name))
+        expect_category = Category.last.as_json(only: %i[id name])
         expect(body_json['category']).to eq expect_category
       end
 
@@ -71,7 +73,7 @@ RSpec.describe "Admin::V1::Categories as :admin", type: :request do
 
     context 'with valid params' do
       let(:new_name) { 'My new Category' }
-      let(:category_params) { { category: {name: new_name}}.to_json }
+      let(:category_params) { { category: { name: new_name } }.to_json }
 
       it 'updates Category' do
         patch url, headers: auth_header(user), params: category_params
@@ -82,7 +84,7 @@ RSpec.describe "Admin::V1::Categories as :admin", type: :request do
       it 'returns updated category' do
         patch url, headers: auth_header(user), params: category_params
         category.reload
-        expect_category = category.as_json(only: %i(id name))
+        expect_category = category.as_json(only: %i[id name])
         expect(body_json['category']).to eq expect_category
       end
 
