@@ -9,4 +9,7 @@ class SystemRequirement < ApplicationRecord
   validates :graphics_card, presence: true
 
   has_many :games, dependent: :restrict_with_error
+
+  include NameSearchable
+  include Paginatable
 end
