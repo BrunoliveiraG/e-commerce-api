@@ -12,6 +12,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.1'
 gem 'rubocop-rails', require: false
+gem 'rubocop-rspec'
 
 # Auth
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
