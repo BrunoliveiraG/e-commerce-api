@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_211_223_185_236) do
+ActiveRecord::Schema.define(version: 20_220_107_205_528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20_211_223_185_236) do
     t.bigint 'productable_id', null: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.integer 'status'
     t.index %w[productable_type productable_id], name: 'index_products_on_productable_type_and_productable_id'
   end
 

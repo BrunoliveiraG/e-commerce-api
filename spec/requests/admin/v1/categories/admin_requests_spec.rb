@@ -143,7 +143,7 @@ RSpec.describe 'Admin::V1::Categories as :admin', type: :request do
 
     it 'returns requested Category' do
       get url, headers: auth_header(user)
-      expected_category = category.as_json(only: %i(id name))
+      expected_category = category.as_json(only: %i[id name])
       expect(body_json['category']).to eq expected_category
     end
 
