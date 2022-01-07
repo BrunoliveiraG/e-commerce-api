@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Admin::ModelLoadingService do
@@ -7,12 +9,12 @@ describe Admin::ModelLoadingService do
     context 'when params are present' do
       let!(:search_categories) do
         categories = []
-        15.times { |n| categories << create(:category, name: "Search #{n + 1}")}
+        15.times { |n| categories << create(:category, name: "Search #{n + 1}") }
         categories
       end
 
       let(:params) do
-        { search: { name: "Search" }, order: {name: :desc}, page: 2, length: 4 }
+        { search: { name: 'Search' }, order: { name: :desc }, page: 2, length: 4 }
       end
 
       it 'returns correct :length considering pagination' do
@@ -22,11 +24,11 @@ describe Admin::ModelLoadingService do
       end
 
       it 'returns records from search by order and pagination' do
-        search_categories.sort!{ |a, b| b[:name] <=> a[:name]}
+        search_categories.sort! { |a, b| b[:name] <=> a[:name] }
         service = described_class.new(Category.all, params)
         result_categories = service.call
         expect_categories = search_categories[4..7]
-        expect(result_categories).to contain_exactly *expect_categories
+        expect(result_categories).to contain_exactly(*expect_categories)
       end
     end
 
@@ -41,7 +43,7 @@ describe Admin::ModelLoadingService do
         service = described_class.new(Category.all, nil)
         result_categories = service.call
         expect_categories = categories[0..9]
-        expect(result_categories).to contain_exactly *expect_categories
+        expect(result_categories).to contain_exactly(*expect_categories)
       end
     end
   end
