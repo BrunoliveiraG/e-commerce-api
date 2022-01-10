@@ -11,8 +11,7 @@ RSpec.describe 'Admin::V1::SystemRequirements as :admin', type: :request do
 
     it 'returns all System Requirements' do
       get url, headers: auth_header(user)
-      expect(body_json['system_requirements']).to contain_exactly(*system_requirements.as_json(only: %i[id name
-                                                                                                        operating_system storage processor memory graphics_card]))
+      expect(body_json['system_requirements']).to contain_exactly(*system_requirements.as_json(only: %i[id name operating_system storage processor memory graphics_card]))
     end
 
     it 'returns success status' do
