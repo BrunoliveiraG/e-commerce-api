@@ -10,15 +10,13 @@ RSpec.describe 'Admin::V1::Users as :admin', type: :request do
     let!(:users) { create_list(:user, 10) }
 
     it 'returns 10 users' do
-      users.insert(0, logged_user)
       get url, headers: auth_header(logged_user)
-      expect(body_json['users'].count).to eq 11
+      expect(body_json['users'].count).to eq 10
     end
 
     it 'returns 10 first Users' do
-      users.insert(0, logged_user)
       get url, headers: auth_header(logged_user)
-      expected_users = users[0..10].as_json(
+      expected_users = users[0..9].as_json(
         only: %i[id name email profile]
       )
       expect(body_json['users']).to contain_exactly(*expected_users)

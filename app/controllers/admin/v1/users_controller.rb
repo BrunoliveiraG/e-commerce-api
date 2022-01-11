@@ -3,7 +3,7 @@
 module Admin
   module V1
     class UsersController < ApiController
-      before_action :load_users, only: %i[update destroy]
+      before_action :load_user, only: %i[update destroy]
 
       def index
         @loading_service = Admin::ModelLoadingService.new(User.all, searchable_params)

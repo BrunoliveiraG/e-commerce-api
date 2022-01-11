@@ -3,11 +3,10 @@
 module Admin
   module V1
     class CouponsController < ApiController
-      before_action :load_coupons, only: %i[update destroy]
+      before_action :load_coupon, only: %i[update destroy]
 
       def index
-        @loading_service = Admin::ModelLoadingService.new(Coupon.all, searchable_params)
-        @loading_service.call
+        @coupons = Coupon.all
       end
 
       def create
