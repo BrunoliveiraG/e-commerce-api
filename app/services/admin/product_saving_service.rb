@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 module Admin
   class ProductSavingService
     class NotSavedProductError < StandardError; end
 
     attr_reader :product, :errors
+
     def initialize(params, product = nil)
       params = params.deep_symbolize_keys
       @product_params = params.reject { |key| key == :productable_attributes }
@@ -29,7 +32,7 @@ module Admin
       save_record!(@product.productable) if @product.productable.present?
       save_record!(@product)
       raise NotSavedProductError if @errors.present?
-    rescue => e
+    rescue StandardError => e
       raise NotSavedProductError
     end
 

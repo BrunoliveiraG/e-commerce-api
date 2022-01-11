@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.product do
   json.partial! @product
   json.partial! @product.productable
