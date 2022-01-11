@@ -6,7 +6,8 @@ module Admin
       before_action :load_coupons, only: %i[update destroy]
 
       def index
-        @coupons = Coupon.all
+        @loading_service = Admin::ModelLoadingService.new(Coupon.all, searchable_params)
+        @loading_service.call
       end
 
       def create
@@ -28,7 +29,11 @@ module Admin
 
       private
 
-      def load_coupons
+      def searchable_params
+        params.permit({ search: :name }, { order: {} }, :page, :length)
+      end
+
+      def load_coupon
         @coupon = Coupon.find(params[:id])
       end
 

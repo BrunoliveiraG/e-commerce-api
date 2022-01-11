@@ -6,7 +6,8 @@ module Admin
       before_action :load_system_requirements, only: %i[update destroy]
 
       def index
-        @system_requirements = SystemRequirement.all
+        @loading_service = Admin::ModelLoadingService.new(SystemRequirement.all, searchable_params)
+        @loading_service.call
       end
 
       def create
@@ -28,7 +29,11 @@ module Admin
 
       private
 
-      def load_system_requirements
+      def searchable_params
+        params.permit({ search: :name }, { order: {} }, :page, :length)
+      end
+
+      def load_system_requirement
         @system_requirement = SystemRequirement.find(params[:id])
       end
 
