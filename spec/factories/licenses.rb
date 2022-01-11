@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :license do
-    key { 'MyString' }
-    game { nil }
-    user { nil }
+    key { Faker::Commerce.unique.promotion_code(digits: 15) }
+    game
+    user
   end
 end

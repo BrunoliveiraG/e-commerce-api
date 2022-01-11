@@ -3,5 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe License, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { build(:license) }
+
+  it { is_expected.to validate_presence_of(:key) }
+  it { is_expected.to validate_uniqueness_of(:key) }
+
+  it { is_expected.to belong_to :user }
+  it { is_expected.to belong_to :game }
 end
