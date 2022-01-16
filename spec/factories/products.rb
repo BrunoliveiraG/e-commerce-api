@@ -7,6 +7,7 @@ FactoryBot.define do
     price { Faker::Commerce.price(range: 0.0..400.0) }
     image { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/product_image.png')) }
     status { :available }
+    featured { true }
 
     after :build do |product|
       product.productable ||= create(:game)
