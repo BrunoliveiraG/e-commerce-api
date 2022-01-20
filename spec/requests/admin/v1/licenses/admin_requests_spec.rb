@@ -11,7 +11,8 @@ RSpec.describe 'Admin::V1::Licenses as :admin', type: :request do
 
     it 'returns all licenses' do
       get url, headers: auth_header(user)
-      expect(body_json['licenses']).to contain_exactly(*licenses.as_json(only: %i[id key game_id user_id platform status]))
+      expect(body_json['licenses']).to contain_exactly(*licenses.as_json(only: %i[id key game_id user_id platform
+                                                                                  status]))
     end
 
     it 'returns success status' do

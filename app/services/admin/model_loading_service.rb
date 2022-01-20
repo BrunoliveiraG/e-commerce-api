@@ -8,7 +8,7 @@ module Admin
       @searchable_model = searchable_model
       @params = params || {}
       @records = []
-      @pagination = { }
+      @pagination = {}
     end
 
     def call
