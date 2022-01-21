@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Coupon, type: :model do
@@ -16,19 +18,19 @@ RSpec.describe Coupon, type: :model do
     expect(subject.errors.keys).to include :due_date
   end
 
-  it "is invalid with current due_date" do
+  it 'is invalid with current due_date' do
     subject.due_date = Time.zone.now
     subject.valid?
     expect(subject.errors.keys).to include :due_date
   end
 
-  it "is valid with future date" do
+  it 'is valid with future date' do
     subject.due_date = Time.zone.now + 1.hour
     subject.valid?
     expect(subject.errors.keys).to_not include :due_date
   end
 
-  context "on #validate_use!" do
+  context 'on #validate_use!' do
     subject { build(:coupon) }
 
     it "raise InvalidUse when it's overdue" do
@@ -50,6 +52,6 @@ RSpec.describe Coupon, type: :model do
     end
   end
 
-  it_behaves_like "like searchable concern", :coupon, :name
-  it_behaves_like "paginatable concern", :coupon
+  it_behaves_like 'like searchable concern', :coupon, :name
+  it_behaves_like 'paginatable concern', :coupon
 end

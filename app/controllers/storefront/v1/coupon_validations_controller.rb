@@ -7,7 +7,7 @@ module Storefront
         @coupon = Coupon.find_by(code: params[:coupon_code])
         @coupon.validate_use!
         render :show
-      rescue
+      rescue Coupon::InvalidUse, NoMethodError
         render_error(message: I18n.t('storefront/v1/coupon_validations.create.failure'))
       end
     end

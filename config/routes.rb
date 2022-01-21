@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       resources :products, only: %i[index show]
       resources :categories, only: :index
       resources :wish_items, only: %i[index create destroy]
-      post "/coupons/:coupon_code/validations", to: "coupon_validations#create"
+      post '/coupons/:coupon_code/validations', to: 'coupon_validations#create'
     end
   end
 end

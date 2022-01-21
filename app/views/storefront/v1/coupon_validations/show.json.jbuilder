@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.coupon do
-  json.(@coupon, :id, :code, :discount_value)
+  json.call(@coupon, :id, :code, :discount_value)
 end
