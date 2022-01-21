@@ -52,7 +52,7 @@ RSpec.describe "Storefront V1 Home", type: :request do
         expect(body_json['latest_releases'].count).to eq 4
       end
 
-      it "returns random latest released products" do
+      it "returns random last released products" do
         get url, headers: unauthenticated_header
         expected_products = latest_released_products.map do |product|
           build_game_product_json(product)
@@ -62,7 +62,7 @@ RSpec.describe "Storefront V1 Home", type: :request do
         end
       end
 
-      it "does not returns any non-latest released products" do
+      it "does not returns any non-last released products" do
         get url, headers: unauthenticated_header
         unexpected_products = (featured_products + cheap_products).map do |product|
           build_game_product_json(product)
@@ -84,7 +84,7 @@ RSpec.describe "Storefront V1 Home", type: :request do
         expect(body_json['cheapest']).to contain_exactly *(expected_products.take(4))
       end
 
-      it "does not returns any non-latest released products" do
+      it "does not returns any non-last released products" do
         get url, headers: unauthenticated_header
         unexpected_products = (featured_products + latest_released_products).map do |product|
           build_game_product_json(product)

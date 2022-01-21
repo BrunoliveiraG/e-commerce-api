@@ -11,10 +11,12 @@ module Storefront
     def call
       set_pagination_values
       get_available_products
-      searched = filter_records.select("products.*, games.mode, games.developer, games.release_date").distinct
+      searched = filter_records.distinct("products.*")
       @records = searched.order(@params[:order].to_h).paginate(@params[:page], @params[:length])
-      set_pagination_attributes(searched.size)
+      set_pagination_attributes(searched.count)
     end
+
+    private
 
     def set_pagination_values
       @params[:page] = @params[:page].to_i
@@ -65,7 +67,7 @@ module Storefront
 
     def set_pagination_attributes(total_filtered)
       total_pages = (total_filtered / @params[:length].to_f).ceil
-      @pagination.merge!(page: @params[:page], length: @records.size,
+      @pagination.merge!(page: @params[:page], length: @records.count,
                          total: total_filtered, total_pages: total_pages)
     end
   end

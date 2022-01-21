@@ -1,49 +1,52 @@
-# frozen_string_literal: true
+module Admin::V1
+  class LicensesController < ApiController
+    before_action :load_license, only: [:show, :update, :destroy]
 
-module Admin
-  module V1
-    class LicensesController < ApiController
-      before_action :load_licenses, only: %i[update destroy]
+    def index
+      game_licenses = License.where(game_id: params[:game_id])
+      @loading_service = Admin::ModelLoadingService.new(game_licenses, searchable_params)
+      @loading_service.call
+    end
 
-      def index
-        @licenses = License.all
-      end
+    def create
+      @license = License.new(game_id: params[:game_id])
+      @license.attributes = license_params
+      save_license!
+    end
 
-      def create
-        @license = License.new
-        @license.attributes = license_params
-        save_license!
-      end
+    def show; end
 
-      def update
-        @license.attributes = license_params
-        save_license!
-      end
+    def update
+      @license.attributes = license_params
+      save_license!
+    end
 
-      def destroy
-        @license.destroy
-      rescue StandardError
-        render_error(fields: @license.errors.messages)
-      end
+    def destroy
+      @license.destroy!
+    rescue
+      render_error(fields: @license.errors.messages)
+    end
 
-      private
+    private
 
-      def load_licenses
-        @license = License.find(params[:id])
-      end
+    def load_license
+      @license = License.find(params[:id])
+    end
 
-      def license_params
-        return {} unless params.key?(:license)
+    def searchable_params
+      params.permit({ search: :key }, { order: {} }, :page, :length)
+    end
 
-        params.require(:license).permit(:id, :key, :game_id, :user_id, :platform, :status)
-      end
+    def license_params
+      return {} unless params.has_key?(:license)
+      params.require(:license).permit(:id, :key, :platform, :status)
+    end
 
-      def save_license!
-        @license.save!
-        render :show
-      rescue StandardError
-        render_error(fields: @license.errors.messages)
-      end
+    def save_license!
+      @license.save!
+      render :show
+    rescue
+      render_error(fields: @license.errors.messages)
     end
   end
 end

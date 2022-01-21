@@ -1,54 +1,49 @@
-# frozen_string_literal: true
+module Admin::V1
+  class CouponsController < ApiController
+    before_action :load_coupon, only: [:show, :update, :destroy]
 
-module Admin
-  module V1
-    class CouponsController < ApiController
-      before_action :load_coupon, only: %i[update destroy]
+    def index
+      permitted = params.permit({ search: :name }, { order: {} }, :page, :length)
+      @loading_service = Admin::ModelLoadingService.new(Coupon.all, permitted)
+      @loading_service.call
+    end
 
-      def index
-        @coupons = Coupon.all
-      end
+    def create
+      @coupon = Coupon.new
+      @coupon.attributes = coupon_params
+      save_coupon!
+    end
 
-      def create
-        @coupon = Coupon.new
-        @coupon.attributes = coupon_params
-        save_coupon!
-      end
 
-      def update
-        @coupon.attributes = coupon_params
-        save_coupon!
-      end
+    def show; end
 
-      def destroy
-        @coupon.destroy
-      rescue StandardError
-        render_error(fields: @coupon.errors.messages)
-      end
+    def update
+      @coupon.attributes = coupon_params
+      save_coupon!
+    end
 
-      private
+    def destroy
+      @coupon.destroy!
+    rescue
+      render_error(fields: @coupon.errors.messages)
+    end
 
-      def searchable_params
-        params.permit({ search: :name }, { order: {} }, :page, :length)
-      end
+    private
 
-      def load_coupon
-        @coupon = Coupon.find(params[:id])
-      end
+    def load_coupon
+      @coupon = Coupon.find(params[:id])
+    end
 
-      def coupon_params
-        return {} unless params.key?(:coupon)
+    def coupon_params
+      return {} unless params.has_key?(:coupon)
+      params.require(:coupon).permit(:id, :name, :code, :status, :discount_value, :due_date)
+    end
 
-        params.require(:coupon).permit(:id, :code, :status, :discount_value,
-                                       :due_date)
-      end
-
-      def save_coupon!
-        @coupon.save!
-        render :show
-      rescue StandardError
-        render_error(fields: @coupon.errors.messages)
-      end
+    def save_coupon!
+      @coupon.save!
+      render :show
+    rescue
+      render_error(fields: @coupon.errors.messages)
     end
   end
 end

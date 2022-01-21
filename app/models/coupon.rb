@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Coupon < ApplicationRecord
+  validates :name, presence: true
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :status, presence: true
   validates :discount_value, presence: true, numericality: { greater_than: 0 }
@@ -9,4 +10,5 @@ class Coupon < ApplicationRecord
   enum status: { active: 1, inactive: 2 }
 
   include Paginatable
+  include LikeSearchable
 end

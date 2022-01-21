@@ -1,9 +1,10 @@
-# frozen_string_literal: true
-
 class License < ApplicationRecord
+  include Paginatable
+  include LikeSearchable
+
   belongs_to :game
-  belongs_to :user
-  validates :key, presence: true, uniqueness: { case_sensitive: true }
+
+  validates :key, presence: true, uniqueness: { case_sensitive: false, scope: :platform }
   validates :platform, presence: true
   validates :status, presence: true
 
