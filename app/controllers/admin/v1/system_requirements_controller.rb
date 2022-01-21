@@ -1,49 +1,54 @@
-module Admin::V1
-  class SystemRequirementsController < ApiController
-    before_action :load_system_requirement, only: [:show, :update, :destroy]
+# frozen_string_literal: true
 
-    def index
-      permitted = params.permit({ search: :name }, { order: {} }, :page, :length)
-      @loading_service = Admin::ModelLoadingService.new(SystemRequirement.all, permitted)
-      @loading_service.call
-    end
+module Admin
+  module V1
+    class SystemRequirementsController < ApiController
+      before_action :load_system_requirement, only: %i[show update destroy]
 
-    def create
-      @system_requirement = SystemRequirement.new
-      @system_requirement.attributes = system_requirement_params
-      save_system_requirement!
-    end
+      def index
+        permitted = params.permit({ search: :name }, { order: {} }, :page, :length)
+        @loading_service = Admin::ModelLoadingService.new(SystemRequirement.all, permitted)
+        @loading_service.call
+      end
 
-    def show; end
+      def create
+        @system_requirement = SystemRequirement.new
+        @system_requirement.attributes = system_requirement_params
+        save_system_requirement!
+      end
 
-    def update
-      @system_requirement.attributes = system_requirement_params
-      save_system_requirement!
-    end
+      def show; end
 
-    def destroy
-      @system_requirement.destroy!
-    rescue
-      render_error(fields: @system_requirement.errors.messages)
-    end
+      def update
+        @system_requirement.attributes = system_requirement_params
+        save_system_requirement!
+      end
 
-    private
+      def destroy
+        @system_requirement.destroy!
+      rescue StandardError
+        render_error(fields: @system_requirement.errors.messages)
+      end
 
-    def load_system_requirement
-      @system_requirement = SystemRequirement.find(params[:id])
-    end
+      private
 
-    def system_requirement_params
-      return {} unless params.has_key?(:system_requirement)
-      params.require(:system_requirement).permit(:id, :name, :operating_system, :storage,
-                                                 :processor, :memory, :graphics_card)
-    end
+      def load_system_requirement
+        @system_requirement = SystemRequirement.find(params[:id])
+      end
 
-    def save_system_requirement!
-      @system_requirement.save!
-      render :show
-    rescue
-      render_error(fields: @system_requirement.errors.messages)
+      def system_requirement_params
+        return {} unless params.key?(:system_requirement)
+
+        params.require(:system_requirement).permit(:id, :name, :operating_system, :storage,
+                                                   :processor, :memory, :graphics_card)
+      end
+
+      def save_system_requirement!
+        @system_requirement.save!
+        render :show
+      rescue StandardError
+        render_error(fields: @system_requirement.errors.messages)
+      end
     end
   end
 end

@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin V1 Coupons as :admin", type: :request do
+RSpec.describe 'Admin V1 Coupons as :admin', type: :request do
   let(:user) { create(:user) }
 
-  context "GET /coupons" do
-    let(:url) { "/admin/v1/coupons" }
+  context 'GET /coupons' do
+    let(:url) { '/admin/v1/coupons' }
     let!(:coupons) { create_list(:coupon, 10) }
 
-    context "without any params" do
-      it "returns 10 coupons" do
+    context 'without any params' do
+      it 'returns 10 coupons' do
         get url, headers: auth_header(user)
         expect(body_json['coupons'].count).to eq 10
       end
 
-      it "returns 10 first Coupons" do
+      it 'returns 10 first Coupons' do
         get url, headers: auth_header(user)
-        expected_coupons = coupons[0..9].as_json(only: %i(id name code status discount_value due_date))
-        expect(body_json['coupons']).to contain_exactly *expected_coupons
+        expected_coupons = coupons[0..9].as_json(only: %i[id name code status discount_value due_date])
+        expect(body_json['coupons']).to contain_exactly(*expected_coupons)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user)
         expect(response).to have_http_status(:ok)
       end
@@ -29,24 +31,24 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       end
     end
 
-    context "with search[name] param" do
+    context 'with search[name] param' do
       let!(:search_name_coupons) do
         coupons = []
         15.times { |n| coupons << create(:coupon, name: "Search #{n + 1}") }
         coupons
       end
 
-      let(:search_params) { { search: { name: "Search" } } }
+      let(:search_params) { { search: { name: 'Search' } } }
 
-      it "returns only searched coupons limited by default pagination" do
+      it 'returns only searched coupons limited by default pagination' do
         get url, headers: auth_header(user), params: search_params
         expected_coupons = search_name_coupons[0..9].map do |coupon|
-          coupon.as_json(only: %i(id name code status discount_value due_date))
+          coupon.as_json(only: %i[id name code status discount_value due_date])
         end
-        expect(body_json['coupons']).to contain_exactly *expected_coupons
+        expect(body_json['coupons']).to contain_exactly(*expected_coupons)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: search_params
         expect(response).to have_http_status(:ok)
       end
@@ -56,24 +58,24 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       end
     end
 
-    context "with pagination params" do
+    context 'with pagination params' do
       let(:page) { 2 }
       let(:length) { 5 }
 
       let(:pagination_params) { { page: page, length: length } }
 
-      it "returns records sized by :length" do
+      it 'returns records sized by :length' do
         get url, headers: auth_header(user), params: pagination_params
         expect(body_json['coupons'].count).to eq length
       end
 
-      it "returns coupons limited by pagination" do
+      it 'returns coupons limited by pagination' do
         get url, headers: auth_header(user), params: pagination_params
-        expected_coupons = coupons[5..9].as_json(only: %i(id name code status discount_value due_date))
-        expect(body_json['coupons']).to contain_exactly *expected_coupons
+        expected_coupons = coupons[5..9].as_json(only: %i[id name code status discount_value due_date])
+        expect(body_json['coupons']).to contain_exactly(*expected_coupons)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: pagination_params
         expect(response).to have_http_status(:ok)
       end
@@ -83,17 +85,17 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       end
     end
 
-    context "with order params" do
+    context 'with order params' do
       let(:order_params) { { order: { name: 'desc' } } }
 
-      it "returns ordered coupons limited by default pagination" do
+      it 'returns ordered coupons limited by default pagination' do
         get url, headers: auth_header(user), params: order_params
-        coupons.sort! { |a, b| b[:name] <=> a[:name]}
-        expected_coupons = coupons[0..9].as_json(only: %i(id name code status discount_value due_date))
-        expect(body_json['coupons']).to contain_exactly *expected_coupons
+        coupons.sort! { |a, b| b[:name] <=> a[:name] }
+        expected_coupons = coupons[0..9].as_json(only: %i[id name code status discount_value due_date])
+        expect(body_json['coupons']).to contain_exactly(*expected_coupons)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: order_params
         expect(response).to have_http_status(:ok)
       end
@@ -104,10 +106,10 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
     end
   end
 
-  context "POST /coupons" do
-    let(:url) { "/admin/v1/coupons" }
+  context 'POST /coupons' do
+    let(:url) { '/admin/v1/coupons' }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:coupon_params) { { coupon: attributes_for(:coupon) }.to_json }
 
       it 'adds a new Coupon' do
@@ -118,7 +120,7 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
 
       it 'returns last added Coupon' do
         post url, headers: auth_header(user), params: coupon_params
-        expected_coupon = Coupon.last.as_json(only: %i(id name code status discount_value due_date))
+        expected_coupon = Coupon.last.as_json(only: %i[id name code status discount_value due_date])
         expect(body_json['coupon']).to eq expected_coupon
       end
 
@@ -128,7 +130,7 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:coupon_invalid_params) do
         { coupon: attributes_for(:coupon, name: nil) }.to_json
       end
@@ -151,27 +153,27 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
     end
   end
 
-  context "GET /coupons/:id" do
+  context 'GET /coupons/:id' do
     let(:coupon) { create(:coupon) }
     let(:url) { "/admin/v1/coupons/#{coupon.id}" }
 
-    it "returns requested Coupon" do
+    it 'returns requested Coupon' do
       get url, headers: auth_header(user)
-      expected_coupon = coupon.as_json(only: %i(id name code status discount_value due_date))
+      expected_coupon = coupon.as_json(only: %i[id name code status discount_value due_date])
       expect(body_json['coupon']).to eq expected_coupon
     end
 
-    it "returns success status" do
+    it 'returns success status' do
       get url, headers: auth_header(user)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  context "PATCH /coupons/:id" do
+  context 'PATCH /coupons/:id' do
     let(:coupon) { create(:coupon) }
     let(:url) { "/admin/v1/coupons/#{coupon.id}" }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:new_name) { 'My new Coupon' }
       let(:coupon_params) { { coupon: { name: new_name } }.to_json }
 
@@ -184,7 +186,7 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       it 'returns updated Coupon' do
         patch url, headers: auth_header(user), params: coupon_params
         coupon.reload
-        expected_coupon = coupon.as_json(only: %i(id name code status discount_value due_date))
+        expected_coupon = coupon.as_json(only: %i[id name code status discount_value due_date])
         expect(body_json['coupon']).to eq expected_coupon
       end
 
@@ -194,7 +196,7 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:coupon_invalid_params) do
         { coupon: attributes_for(:coupon, name: nil) }.to_json
       end
@@ -218,7 +220,7 @@ RSpec.describe "Admin V1 Coupons as :admin", type: :request do
     end
   end
 
-  context "DELETE /coupons/:id" do
+  context 'DELETE /coupons/:id' do
     let!(:coupon) { create(:coupon) }
     let(:url) { "/admin/v1/coupons/#{coupon.id}" }
 

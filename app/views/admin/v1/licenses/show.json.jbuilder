@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.license do
-  json.(@license, :id, :key, :platform, :status, :game_id)
+  json.call(@license, :id, :key, :platform, :status, :game_id)
 end

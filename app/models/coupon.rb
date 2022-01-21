@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Coupon < ApplicationRecord
+  class InvalidUse < StandardError; end
+
   validates :name, presence: true
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :status, presence: true
@@ -11,4 +13,10 @@ class Coupon < ApplicationRecord
 
   include Paginatable
   include LikeSearchable
+
+  def validate_use!
+    raise InvalidUse unless active? && due_date >= Time.now
+
+    true
+  end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.licenses do
   json.array! @loading_service.records, :id, :key, :platform, :status, :game_id
 end

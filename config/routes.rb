@@ -20,9 +20,9 @@ Rails.application.routes.draw do
   namespace :storefront do
     namespace :v1 do
       get 'home' => 'home#index'
-      resources :products, only: [:index, :show]
+      resources :products, only: %i[index show]
       resources :categories, only: :index
-      resources :wish_items, only: [:index, :create, :destroy]
+      resources :wish_items, only: %i[index create destroy]
     end
   end
 end

@@ -48,6 +48,13 @@ if Rails.env.development? || Rails.env.test?
         platform = %i[steam battle_net origin].sample
         create(:license, status: status, platform: platform, game_id: game.id, user_id: user.id)
       end
+
+      10.times do
+        product = Product.all.sample
+        (1..10).to_a.sample.times do
+          product.wish_items.create(user: User.all.sample)
+        end
+      end
     end
   end
 end

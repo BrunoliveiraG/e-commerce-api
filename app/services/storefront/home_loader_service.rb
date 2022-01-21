@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Storefront
   class HomeLoaderService
     QUANTITY_OF_RECORDS_PER_GROUP = 4

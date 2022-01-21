@@ -1,26 +1,28 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin V1 Licenses as :admin", type: :request do
+RSpec.describe 'Admin V1 Licenses as :admin', type: :request do
   let(:user) { create(:user) }
   let(:game) { create(:game) }
 
-  context "GET /games/:game_id/licenses" do
+  context 'GET /games/:game_id/licenses' do
     let(:url) { "/admin/v1/games/#{game.id}/licenses" }
     let!(:licenses) { create_list(:license, 10, game: game) }
 
-    context "without any params" do
-      it "returns 10 Licenses" do
+    context 'without any params' do
+      it 'returns 10 Licenses' do
         get url, headers: auth_header(user)
         expect(body_json['licenses'].count).to eq 10
       end
 
-      it "returns 10 first Licenses" do
+      it 'returns 10 first Licenses' do
         get url, headers: auth_header(user)
-        expected_licenses = licenses[0..9].as_json(only: %i(id key platform status game_id))
-        expect(body_json['licenses']).to contain_exactly *expected_licenses
+        expected_licenses = licenses[0..9].as_json(only: %i[id key platform status game_id])
+        expect(body_json['licenses']).to contain_exactly(*expected_licenses)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user)
         expect(response).to have_http_status(:ok)
       end
@@ -30,24 +32,24 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       end
     end
 
-    context "with search[key] param" do
+    context 'with search[key] param' do
       let!(:search_key_licenses) do
         licenses = []
         15.times { |n| licenses << create(:license, key: "SRC#{n + 1}", game: game) }
         licenses
       end
 
-      let(:search_params) { { search: { key: "SRC" } } }
+      let(:search_params) { { search: { key: 'SRC' } } }
 
-      it "returns only seached licenses limited by default pagination" do
+      it 'returns only seached licenses limited by default pagination' do
         get url, headers: auth_header(user), params: search_params
         expected_licenses = search_key_licenses[0..9].map do |license|
-          license.as_json(only: %i(id key platform status game_id))
+          license.as_json(only: %i[id key platform status game_id])
         end
-        expect(body_json['licenses']).to contain_exactly *expected_licenses
+        expect(body_json['licenses']).to contain_exactly(*expected_licenses)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: search_params
         expect(response).to have_http_status(:ok)
       end
@@ -57,24 +59,24 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       end
     end
 
-    context "with pagination params" do
+    context 'with pagination params' do
       let(:page) { 2 }
       let(:length) { 5 }
 
       let(:pagination_params) { { page: page, length: length } }
 
-      it "returns records sized by :length" do
+      it 'returns records sized by :length' do
         get url, headers: auth_header(user), params: pagination_params
         expect(body_json['licenses'].count).to eq length
       end
 
-      it "returns licenses limited by pagination" do
+      it 'returns licenses limited by pagination' do
         get url, headers: auth_header(user), params: pagination_params
-        expected_licenses = licenses[5..9].as_json(only: %i(id key platform status game_id))
-        expect(body_json['licenses']).to contain_exactly *expected_licenses
+        expected_licenses = licenses[5..9].as_json(only: %i[id key platform status game_id])
+        expect(body_json['licenses']).to contain_exactly(*expected_licenses)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: pagination_params
         expect(response).to have_http_status(:ok)
       end
@@ -84,17 +86,17 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       end
     end
 
-    context "with order params" do
+    context 'with order params' do
       let(:order_params) { { order: { key: 'desc' } } }
 
-      it "returns ordered licenses limited by default pagination" do
+      it 'returns ordered licenses limited by default pagination' do
         get url, headers: auth_header(user), params: order_params
-        licenses.sort! { |a, b| b[:key] <=> a[:key]}
-        expected_licenses = licenses[0..9].as_json(only: %i(id key platform status game_id))
-        expect(body_json['licenses']).to contain_exactly *expected_licenses
+        licenses.sort! { |a, b| b[:key] <=> a[:key] }
+        expected_licenses = licenses[0..9].as_json(only: %i[id key platform status game_id])
+        expect(body_json['licenses']).to contain_exactly(*expected_licenses)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: order_params
         expect(response).to have_http_status(:ok)
       end
@@ -105,10 +107,10 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
     end
   end
 
-  context "POST /games/:game_id/licenses" do
+  context 'POST /games/:game_id/licenses' do
     let(:url) { "/admin/v1/games/#{game.id}/licenses" }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:license_params) { { license: attributes_for(:license) }.to_json }
 
       it 'adds a new License' do
@@ -119,7 +121,7 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
 
       it 'returns last added License' do
         post url, headers: auth_header(user), params: license_params
-        expected_license = License.last.as_json(only: %i(id key platform status game_id))
+        expected_license = License.last.as_json(only: %i[id key platform status game_id])
         expect(body_json['license']).to eq expected_license
       end
 
@@ -129,7 +131,7 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:license_invalid_params) do
         { license: attributes_for(:license, key: nil) }.to_json
       end
@@ -152,27 +154,27 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
     end
   end
 
-  context "GET /licenses/:id" do
+  context 'GET /licenses/:id' do
     let(:license) { create(:license) }
     let(:url) { "/admin/v1/licenses/#{license.id}" }
 
-    it "returns requested License" do
+    it 'returns requested License' do
       get url, headers: auth_header(user)
-      expected_license = license.as_json(only: %i(id key platform status game_id))
+      expected_license = license.as_json(only: %i[id key platform status game_id])
       expect(body_json['license']).to eq expected_license
     end
 
-    it "returns success status" do
+    it 'returns success status' do
       get url, headers: auth_header(user)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  context "PATCH /licenses/:id" do
+  context 'PATCH /licenses/:id' do
     let(:license) { create(:license) }
     let(:url) { "/admin/v1/licenses/#{license.id}" }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:new_key) { 'newkey' }
       let(:license_params) { { license: { key: new_key } }.to_json }
 
@@ -185,7 +187,7 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       it 'returns updated License' do
         patch url, headers: auth_header(user), params: license_params
         license.reload
-        expected_license = license.as_json(only: %i(id key platform status game_id))
+        expected_license = license.as_json(only: %i[id key platform status game_id])
         expect(body_json['license']).to eq expected_license
       end
 
@@ -195,7 +197,7 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:license_invalid_params) do
         { license: attributes_for(:license, key: nil) }.to_json
       end
@@ -219,7 +221,7 @@ RSpec.describe "Admin V1 Licenses as :admin", type: :request do
     end
   end
 
-  context "DELETE /licenses/:id" do
+  context 'DELETE /licenses/:id' do
     let!(:license) { create(:license) }
     let(:url) { "/admin/v1/licenses/#{license.id}" }
 

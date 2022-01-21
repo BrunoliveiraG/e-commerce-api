@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class ModelLoadingService
     attr_reader :records, :pagination
@@ -27,7 +29,8 @@ module Admin
     end
 
     def search_records(searched)
-      return searched unless @params.has_key?(:search)
+      return searched unless @params.key?(:search)
+
       @params[:search].each do |key, value|
         searched = searched.like(key, value)
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SystemRequirement < ApplicationRecord
   include LikeSearchable
   include Paginatable

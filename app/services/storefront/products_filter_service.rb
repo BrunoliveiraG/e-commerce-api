@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Storefront
   class ProductsFilterService
     attr_reader :records, :pagination
@@ -11,7 +13,7 @@ module Storefront
     def call
       set_pagination_values
       get_available_products
-      searched = filter_records.distinct("products.*")
+      searched = filter_records.distinct('products.*')
       @records = searched.order(@params[:order].to_h).paginate(@params[:page], @params[:length])
       set_pagination_attributes(searched.count)
     end
@@ -40,14 +42,16 @@ module Storefront
     end
 
     def filter_by_search
-      return @records.all unless @params.has_key?(:search)
+      return @records.all unless @params.key?(:search)
+
       filtered_records = @records.like(:name, @params[:search])
       filtered_records = filtered_records.or(@records.like(:description, @params[:search]))
       filtered_records.or @records.merge(Game.like(:developer, @params[:search]))
     end
 
     def filter_by_categories
-      return @records.all unless @params.has_key?(:category_ids)
+      return @records.all unless @params.key?(:category_ids)
+
       @records.where(categories: { id: @params[:category_ids] })
     end
 
@@ -55,13 +59,23 @@ module Storefront
       min_price = @params.dig(:price, :min)
       max_price = @params.dig(:price, :max)
       return @records.all if min_price.blank? && max_price.blank?
+
       @records.where(price: min_price..max_price)
     end
 
     def filter_by_release_date
-      min_date = Time.parse(@params.dig(:release_date, :min)).beginning_of_day rescue nil
-      max_date = Time.parse(@params.dig(:release_date, :max)).end_of_day rescue nil
+      min_date = begin
+        Time.parse(@params.dig(:release_date, :min)).beginning_of_day
+      rescue StandardError
+        nil
+      end
+      max_date = begin
+        Time.parse(@params.dig(:release_date, :max)).end_of_day
+      rescue StandardError
+        nil
+      end
       return @records.all if min_date.blank? && max_date.blank?
+
       Game.where(release_date: min_date..max_date)
     end
 

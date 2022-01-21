@@ -1,8 +1,11 @@
-module Storefront::V1
-  class CategoriesController < ApplicationController
+# frozen_string_literal: true
 
-    def index
-      @categories = Category.order(:name)
+module Storefront
+  module V1
+    class CategoriesController < ApplicationController
+      def index
+        @categories = Category.order(:name)
+      end
     end
   end
 end

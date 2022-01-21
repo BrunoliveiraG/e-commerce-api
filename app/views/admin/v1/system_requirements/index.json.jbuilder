@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.system_requirements do
   json.array! @loading_service.records,
               :id, :name, :operating_system, :storage, :processor, :memory, :graphics_card

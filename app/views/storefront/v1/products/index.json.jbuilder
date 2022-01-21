@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 json.products do
   json.array! @service.records do |product|
-    json.(product, :id, :name, :description)
+    json.call(product, :id, :name, :description)
     json.price product.price.to_f
     json.image_url rails_blob_url(product.image)
     json.categories product.categories.pluck(:name)

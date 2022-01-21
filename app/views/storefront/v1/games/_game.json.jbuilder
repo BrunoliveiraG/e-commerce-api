@@ -1,2 +1,4 @@
-json.(game, :mode, :release_date, :developer)
+# frozen_string_literal: true
+
+json.call(game, :mode, :release_date, :developer)
 json.system_requirement game.system_requirement

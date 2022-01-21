@@ -1,5 +1,7 @@
-shared_examples "like searchable concern" do |factory_name, field|
-  let!(:search_param) { "Example" }
+# frozen_string_literal: true
+
+shared_examples 'like searchable concern' do |factory_name, field|
+  let!(:search_param) { 'Example' }
   let!(:records_to_find) do
     (0..3).to_a.map { |index| create(factory_name, field => "Example #{index}") }
   end

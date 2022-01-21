@@ -1,27 +1,29 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
+RSpec.describe 'Admin V1 System Requirements as :admin', type: :request do
   let(:user) { create(:user) }
 
-  context "GET /system_requirements" do
-    let(:url) { "/admin/v1/system_requirements" }
+  context 'GET /system_requirements' do
+    let(:url) { '/admin/v1/system_requirements' }
     let!(:system_requirements) { create_list(:system_requirement, 10) }
 
-    context "without any params" do
-      it "returns 10 system_requirements" do
+    context 'without any params' do
+      it 'returns 10 system_requirements' do
         get url, headers: auth_header(user)
         expect(body_json['system_requirements'].count).to eq 10
       end
 
-      it "returns 10 first System Requirements" do
+      it 'returns 10 first System Requirements' do
         get url, headers: auth_header(user)
         expected_system_requirements = system_requirements[0..9].as_json(
-          only: %i(id name operating_system storage processor memory graphics_card)
+          only: %i[id name operating_system storage processor memory graphics_card]
         )
-        expect(body_json['system_requirements']).to contain_exactly *expected_system_requirements
+        expect(body_json['system_requirements']).to contain_exactly(*expected_system_requirements)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user)
         expect(response).to have_http_status(:ok)
       end
@@ -31,24 +33,24 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with search[name] param" do
+    context 'with search[name] param' do
       let!(:search_name_system_requirements) do
         system_requirements = []
         15.times { |n| system_requirements << create(:system_requirement, name: "Search #{n + 1}") }
         system_requirements
       end
 
-      let(:search_params) { { search: { name: "Search" } } }
+      let(:search_params) { { search: { name: 'Search' } } }
 
-      it "returns only searched system_requirements limited by default pagination" do
+      it 'returns only searched system_requirements limited by default pagination' do
         get url, headers: auth_header(user), params: search_params
         expected_system_requirements = search_name_system_requirements[0..9].map do |system_requirement|
-          system_requirement.as_json(only: %i(id name operating_system storage processor memory graphics_card))
+          system_requirement.as_json(only: %i[id name operating_system storage processor memory graphics_card])
         end
-        expect(body_json['system_requirements']).to contain_exactly *expected_system_requirements
+        expect(body_json['system_requirements']).to contain_exactly(*expected_system_requirements)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: search_params
         expect(response).to have_http_status(:ok)
       end
@@ -58,26 +60,26 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with pagination params" do
+    context 'with pagination params' do
       let(:page) { 2 }
       let(:length) { 5 }
 
       let(:pagination_params) { { page: page, length: length } }
 
-      it "returns records sized by :length" do
+      it 'returns records sized by :length' do
         get url, headers: auth_header(user), params: pagination_params
         expect(body_json['system_requirements'].count).to eq length
       end
 
-      it "returns system_requirements limited by pagination" do
+      it 'returns system_requirements limited by pagination' do
         get url, headers: auth_header(user), params: pagination_params
         expected_system_requirements = system_requirements[5..9].as_json(
-          only: %i(id name operating_system storage processor memory graphics_card)
+          only: %i[id name operating_system storage processor memory graphics_card]
         )
-        expect(body_json['system_requirements']).to contain_exactly *expected_system_requirements
+        expect(body_json['system_requirements']).to contain_exactly(*expected_system_requirements)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: pagination_params
         expect(response).to have_http_status(:ok)
       end
@@ -87,19 +89,19 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with order params" do
+    context 'with order params' do
       let(:order_params) { { order: { name: 'desc' } } }
 
-      it "returns ordered system_requirements limited by default pagination" do
+      it 'returns ordered system_requirements limited by default pagination' do
         get url, headers: auth_header(user), params: order_params
-        system_requirements.sort! { |a, b| b[:name] <=> a[:name]}
+        system_requirements.sort! { |a, b| b[:name] <=> a[:name] }
         expected_system_requirements = system_requirements[0..9].as_json(
-          only: %i(id name operating_system storage processor memory graphics_card)
+          only: %i[id name operating_system storage processor memory graphics_card]
         )
-        expect(body_json['system_requirements']).to contain_exactly *expected_system_requirements
+        expect(body_json['system_requirements']).to contain_exactly(*expected_system_requirements)
       end
 
-      it "returns success status" do
+      it 'returns success status' do
         get url, headers: auth_header(user), params: order_params
         expect(response).to have_http_status(:ok)
       end
@@ -110,10 +112,10 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
     end
   end
 
-  context "POST /system_requirements" do
-    let(:url) { "/admin/v1/system_requirements" }
+  context 'POST /system_requirements' do
+    let(:url) { '/admin/v1/system_requirements' }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:system_requirement_params) { { system_requirement: attributes_for(:system_requirement) }.to_json }
 
       it 'adds a new SystemRequirement' do
@@ -125,7 +127,7 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       it 'returns last added SystemRequirement' do
         post url, headers: auth_header(user), params: system_requirement_params
         expected_system_requirement = SystemRequirement.last.as_json(
-          only: %i(id name operating_system storage processor memory graphics_card)
+          only: %i[id name operating_system storage processor memory graphics_card]
         )
         expect(body_json['system_requirement']).to eq expected_system_requirement
       end
@@ -136,7 +138,7 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:system_requirement_invalid_params) do
         { system_requirement: attributes_for(:system_requirement, name: nil) }.to_json
       end
@@ -159,29 +161,29 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
     end
   end
 
-  context "GET /system_requirements/:id" do
+  context 'GET /system_requirements/:id' do
     let(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
 
-    it "returns requested SystemRequirement" do
+    it 'returns requested SystemRequirement' do
       get url, headers: auth_header(user)
       expected_system_requirement = system_requirement.as_json(
-        only: %i(id name operating_system storage processor memory graphics_card)
+        only: %i[id name operating_system storage processor memory graphics_card]
       )
       expect(body_json['system_requirement']).to eq expected_system_requirement
     end
 
-    it "returns success status" do
+    it 'returns success status' do
       get url, headers: auth_header(user)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  context "PATCH /system_requirements/:id" do
+  context 'PATCH /system_requirements/:id' do
     let(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:new_name) { 'My new SystemRequirement' }
       let(:system_requirement_params) { { system_requirement: { name: new_name } }.to_json }
 
@@ -195,7 +197,7 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
         patch url, headers: auth_header(user), params: system_requirement_params
         system_requirement.reload
         expected_system_requirement = system_requirement.as_json(
-          only: %i(id name operating_system storage processor memory graphics_card)
+          only: %i[id name operating_system storage processor memory graphics_card]
         )
         expect(body_json['system_requirement']).to eq expected_system_requirement
       end
@@ -206,7 +208,7 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:system_requirement_invalid_params) do
         { system_requirement: attributes_for(:system_requirement, name: nil) }.to_json
       end
@@ -230,11 +232,11 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
     end
   end
 
-  context "DELETE /system_requirements/:id" do
+  context 'DELETE /system_requirements/:id' do
     let!(:system_requirement) { create(:system_requirement) }
     let(:url) { "/admin/v1/system_requirements/#{system_requirement.id}" }
 
-    context "without an associated Game" do
+    context 'without an associated Game' do
       it 'removes SystemRequirement' do
         expect do
           delete url, headers: auth_header(user)
@@ -252,7 +254,7 @@ RSpec.describe "Admin V1 System Requirements as :admin", type: :request do
       end
     end
 
-    context "with an associated Game" do
+    context 'with an associated Game' do
       before(:each) do
         create(:game, system_requirement: system_requirement)
       end
