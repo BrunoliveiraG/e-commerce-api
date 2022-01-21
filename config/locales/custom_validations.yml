@@ -4,3 +4,4 @@ en:
     errors:
       messages:
         future_date: "Must have a future due date"
+        invalid_cpf_cnpj: "Must be a valid CPF or CNPJ"
