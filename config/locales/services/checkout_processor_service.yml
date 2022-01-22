@@ -1,0 +1,8 @@
+en:
+  storefront/checkout_processor_service:
+    errors:
+      items:
+        presence: must be present
+        empty: can't be empty
+      coupon:
+        invalid: is not valid

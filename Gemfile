@@ -14,6 +14,7 @@ gem 'puma', '~> 4.1'
 gem 'rubocop-rails', require: false
 gem 'rubocop-rspec'
 gem 'cpf_cnpj', '~>0.5.0'
+gem 'httparty', '~> 0.18.1'
 
 # Auth
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
@@ -30,6 +31,7 @@ group :development, :test do
   gem 'faker'
   gem 'rspec-rails', '~> 4.0.1'
   gem 'shoulda-matchers', '~> 4.0'
+  gem 'database_cleaner'
 end
 
 group :development do
