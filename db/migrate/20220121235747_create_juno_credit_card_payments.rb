@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJunoCreditCardPayments < ActiveRecord::Migration[6.0]
   def change
     create_table :juno_credit_card_payments do |t|

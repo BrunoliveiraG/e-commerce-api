@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :order do
     status { :processing_order }
@@ -7,7 +9,7 @@ FactoryBot.define do
     card_hash { Faker::Lorem.characters }
     installments { 5 }
     address { build(:address) }
-    document { "03.000.050/0001-67" }
+    document { '03.000.050/0001-67' }
     user
 
     trait :with_items do

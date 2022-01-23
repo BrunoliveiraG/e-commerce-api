@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require_relative '../../../libs/juno_api/auth'
 
@@ -22,7 +24,7 @@ describe JunoApi::Auth do
       expect(object_ids.size).to eq 1
     end
 
-    it "call Juno API only once" do
+    it 'call Juno API only once' do
       allow(auth_class).to receive(:post).and_return(response).once
       object_ids = 0.upto(4).collect do
         auth_class.singleton
@@ -30,7 +32,7 @@ describe JunoApi::Auth do
     end
   end
 
-  context "when call #access_token" do
+  context 'when call #access_token' do
     let(:first_response) do
       double(
         parsed_response: { 'access_token' => SecureRandom.hex, 'expires_in' => 1.day },

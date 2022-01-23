@@ -1,5 +1,7 @@
-require_relative "./auth"
-require_relative "./request_error"
+# frozen_string_literal: true
+
+require_relative './auth'
+require_relative './request_error'
 
 module JunoApi
   class CreditCardPayment
@@ -18,7 +20,7 @@ module JunoApi
     def create!(order)
       auth_header = { 'Authorization' => "Bearer #{auth.access_token}" }
       body = prepare_create_body(order, order.juno_charges.first.key)
-      response = self.class.post("/", headers: auth_header, body: body.to_json)
+      response = self.class.post('/', headers: auth_header, body: body.to_json)
       raise_error(response) if response.code != 200
       organize_response(response)
     end
@@ -31,7 +33,7 @@ module JunoApi
       {
         chargeId: charge_key,
         creditCardDetails: { creditCardHash: order.card_hash },
-        billing: { email: order.user.email, address: build_address_attributes(order.address)}
+        billing: { email: order.user.email, address: build_address_attributes(order.address) }
       }
     end
 
@@ -41,9 +43,9 @@ module JunoApi
 
     def raise_error(response)
       details = response.parsed_response['details'].map { |detail| detail.transform_keys(&:underscore) }
-      raise RequestError.new("Invalid request sent to Juno", details)
+      raise RequestError.new('Invalid request sent to Juno', details)
     rescue NoMethodError => e
-      raise RequestError.new("Invalid request sent to Juno")
+      raise RequestError, 'Invalid request sent to Juno'
     end
 
     def organize_response(response)

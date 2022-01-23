@@ -1,10 +1,12 @@
-require "rails_helper"
-require_relative "../../../libs/juno_api/credit_card_payment"
+# frozen_string_literal: true
+
+require 'rails_helper'
+require_relative '../../../libs/juno_api/credit_card_payment'
 
 describe JunoApi::CreditCardPayment do
   let!(:order) { create(:order) }
 
-  describe "#create" do
+  describe '#create' do
     let!(:order) { create(:order) }
     let!(:charges) { create_list(:juno_charge, 5, order: order) }
 
@@ -13,9 +15,9 @@ describe JunoApi::CreditCardPayment do
       allow(JunoApi::Auth).to receive(:singleton).and_return(singleton)
     end
 
-    context "with invalid params" do
-      it "should raise an error" do
-        error = { details: [{ message: "Some error", errorCode: "10000" }] }.to_json
+    context 'with invalid params' do
+      it 'should raise an error' do
+        error = { details: [{ message: 'Some error', errorCode: '10000' }] }.to_json
         error_response = double(code: 400, body: error, parsed_response: JSON.parse(error))
         allow(JunoApi::CreditCardPayment).to receive(:post).and_return(error_response)
         expect do
@@ -24,14 +26,14 @@ describe JunoApi::CreditCardPayment do
       end
     end
 
-    context "with valid params" do
+    context 'with valid params' do
       let(:return_from_api) do
         payments = charges.map.with_index do |charge, index|
-          release_date = (Time.zone.now + index.months).strftime("%Y-%m-%d")
+          release_date = (Time.zone.now + index.months).strftime('%Y-%m-%d')
           {
-            id: "pay_000#{index}", chargeId: charge.key, date: Time.zone.now.strftime("%Y-%m-%d"),
-            releaseDate: release_date, amount: charge.amount.to_f, fee: 2, type: "INSTALLMENT_CREDIT_CARD",
-            status: "CONFIRMED", failReason: nil
+            id: "pay_000#{index}", chargeId: charge.key, date: Time.zone.now.strftime('%Y-%m-%d'),
+            releaseDate: release_date, amount: charge.amount.to_f, fee: 2, type: 'INSTALLMENT_CREDIT_CARD',
+            status: 'CONFIRMED', failReason: nil
           }
         end
         { transactionId: SecureRandom.hex, installments: charges.count, payments: payments }.to_json
@@ -42,15 +44,15 @@ describe JunoApi::CreditCardPayment do
         allow(JunoApi::CreditCardPayment).to receive(:post).and_return(api_response)
       end
 
-      it "returns same quantity of charges" do
+      it 'returns same quantity of charges' do
         payments = described_class.new.create!(order)
         expect(payments.count).to eq charges.count
       end
 
-      it "return expected payments hash" do
+      it 'return expected payments hash' do
         expected_payments = charges.map.with_index do |charge, index|
-          release_date = (Time.zone.now + index.months).strftime("%Y-%m-%d")
-          { key: "pay_000#{index}", charge: charge.key, release_date: release_date, status: "CONFIRMED", reason: nil }
+          release_date = (Time.zone.now + index.months).strftime('%Y-%m-%d')
+          { key: "pay_000#{index}", charge: charge.key, release_date: release_date, status: 'CONFIRMED', reason: nil }
         end
         payments = described_class.new.create!(order)
         expect(payments).to eq expected_payments

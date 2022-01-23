@@ -61,6 +61,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  JUNO_AUTH_URL = "https://sandbox.boletobancario.com"
-  JUNO_RESOURCE_URL = "https://sandbox.boletobancario.com/api-integration"
+  JUNO_AUTH_URL = 'https://sandbox.boletobancario.com'
+  JUNO_RESOURCE_URL = 'https://sandbox.boletobancario.com/api-integration'
 end

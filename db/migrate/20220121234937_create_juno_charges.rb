@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJunoCharges < ActiveRecord::Migration[6.0]
   def change
     create_table :juno_charges do |t|

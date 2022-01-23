@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Storefront
   class CheckoutProcessorService
     class InvalidParamsError < StandardError; end
@@ -20,19 +22,18 @@ module Storefront
     private
 
     def check_presence_of_items_param
-      unless @params.has_key?(:items)
+      unless @params.key?(:items)
         @errors[:items] = I18n.t('storefront/checkout_processor_service.errors.items.presence')
       end
     end
 
     def check_emptiness_of_items_param
-      if @params[:items].blank?
-        @errors[:items] = I18n.t('storefront/checkout_processor_service.errors.items.empty')
-      end
+      @errors[:items] = I18n.t('storefront/checkout_processor_service.errors.items.empty') if @params[:items].blank?
     end
 
     def validate_coupon
-      return unless @params.has_key?(:coupon_id)
+      return unless @params.key?(:coupon_id)
+
       @coupon = Coupon.find(@params[:coupon_id])
       @coupon.validate_use!
     rescue Coupon::InvalidUse, ActiveRecord::RecordNotFound
@@ -43,7 +44,7 @@ module Storefront
       create_order
     rescue ActiveRecord::RecordInvalid => e
       @errors.merge! e.record.errors.messages
-      @errors.merge!(address: e.record.address.errors.messages) if e.record.errors.has_key?(:address)
+      @errors.merge!(address: e.record.address.errors.messages) if e.record.errors.key?(:address)
     end
 
     def create_order

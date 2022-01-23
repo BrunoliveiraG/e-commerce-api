@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Storefront V1 Checkout as authenticated user", type: :request do
-  let(:user) { create(:user, [:admin, :client].sample) }
+RSpec.describe 'Storefront V1 Checkout as authenticated user', type: :request do
+  let(:user) { create(:user, %i[admin client].sample) }
 
-  context "POST /checkouts" do
-    let(:url) { "/storefront/v1/checkouts" }
+  context 'POST /checkouts' do
+    let(:url) { '/storefront/v1/checkouts' }
     let!(:products) { create_list(:product, 3) }
 
-    context "with valid params" do
+    context 'with valid params' do
       let!(:coupon) { create(:coupon) }
       let(:params) do
         {
           checkout: {
             payment_type: :credit_card, installments: 2,
-            document: '03.000.050/0001-67', card_hash: "123456", address: attributes_for(:address),
+            document: '03.000.050/0001-67', card_hash: '123456', address: attributes_for(:address),
             items: [
               { quantity: 2, product_id: products.first.id },
               { quantity: 3, product_id: products.second.id }
@@ -37,7 +39,7 @@ RSpec.describe "Storefront V1 Checkout as authenticated user", type: :request do
       it 'returns created Order with associated Line Itens and Coupon' do
         post url, headers: auth_header, params: params
         order = Order.last
-        expected_order = order.as_json(only: %i(id payment_type installments))
+        expected_order = order.as_json(only: %i[id payment_type installments])
         expected_order.merge!('subtotal' => order.subtotal.to_f, 'total_amount' => order.total_amount.to_f)
         expect(body_json['order']).to eq expected_order
       end
@@ -48,7 +50,7 @@ RSpec.describe "Storefront V1 Checkout as authenticated user", type: :request do
       end
     end
 
-    context "with invalid params" do
+    context 'with invalid params' do
       let(:invalid_params) do
         {
           checkout: {

@@ -1,11 +1,13 @@
-require_relative "./auth"
-require_relative "./request_error"
+# frozen_string_literal: true
+
+require_relative './auth'
+require_relative './request_error'
 
 module JunoApi
   class Charge
     include HTTParty
 
-    PAYMENT_TYPE = { 'billet' => "BOLETO", 'credit_card' =>"CREDIT_CARD" }
+    PAYMENT_TYPE = { 'billet' => 'BOLETO', 'credit_card' => 'CREDIT_CARD' }.freeze
 
     base_uri "#{JUNO_RESOURCE_URL}/charges"
 
@@ -20,7 +22,7 @@ module JunoApi
     def create!(order)
       auth_header = { 'Authorization' => "Bearer #{auth.access_token}" }
       body = prepare_create_body(order)
-      response = self.class.post("/", headers: auth_header, body: body.to_json)
+      response = self.class.post('/', headers: auth_header, body: body.to_json)
       raise_error(response) if response.code != 200
       organize_response(response)
     end
@@ -38,9 +40,9 @@ module JunoApi
 
     def raise_error(response)
       details = response.parsed_response['details'].map { |detail| detail.transform_keys(&:underscore) }
-      raise RequestError.new("Invalid request sent to Juno", details)
+      raise RequestError.new('Invalid request sent to Juno', details)
     rescue NoMethodError => e
-      raise RequestError.new("Invalid request sent to Juno")
+      raise RequestError, 'Invalid request sent to Juno'
     end
 
     def organize_response(response)
@@ -53,8 +55,8 @@ module JunoApi
     def build_charge(order)
       {
         description: "Order ##{order.id}", amount: (order.total_amount / order.installments).floor(2),
-        dueDate: order.due_date.strftime("%Y-%m-%d"), installments: order.installments,
-        discountAmount: (order.coupon&.discount_value).to_f, paymentTypes: [PAYMENT_TYPE[order.payment_type]]
+        dueDate: order.due_date.strftime('%Y-%m-%d'), installments: order.installments,
+        discountAmount: order.coupon&.discount_value.to_f, paymentTypes: [PAYMENT_TYPE[order.payment_type]]
       }
     end
   end

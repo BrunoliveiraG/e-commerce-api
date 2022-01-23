@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JunoApi
   class RequestError < StandardError
     attr_reader :error

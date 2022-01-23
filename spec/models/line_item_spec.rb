@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe LineItem, type: :model do
@@ -9,7 +11,7 @@ RSpec.describe LineItem, type: :model do
   it { is_expected.to belong_to :order }
   it { is_expected.to belong_to :product }
 
-  it "#total must be :payed_price multiplied by :quantity" do
+  it '#total must be :payed_price multiplied by :quantity' do
     payed_price = 153.32
     quantity = 2
     subject = build(:line_item, payed_price: payed_price, quantity: quantity)

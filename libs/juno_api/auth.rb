@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JunoApi
   class Auth
     include HTTParty
@@ -6,7 +8,7 @@ module JunoApi
     LIMIT_DATE_TO_RENEW = 90
     SECONDS_TO_WAIT_WHILE_PROCESSING = 0.5
 
-    base_uri "#{JUNO_AUTH_URL}"
+    base_uri JUNO_AUTH_URL.to_s
 
     attr_reader :access_token, :expires_in, :request_time
 
@@ -29,9 +31,7 @@ module JunoApi
     end
 
     def self.wait_until_process_is_done
-      while @processing
-        sleep SECONDS_TO_WAIT_WHILE_PROCESSING
-      end
+      sleep SECONDS_TO_WAIT_WHILE_PROCESSING while @processing
     end
 
     def initialize
@@ -43,14 +43,15 @@ module JunoApi
 
     def process_auth!
       body = { grant_type: 'client_credentials' }
-      response = self.class.post(PATH, headers: { 'Authorization' => 'Basic ' + auth_token }, body: body )
-      raise Error.new("Bad request") if response.code != 200
+      response = self.class.post(PATH, headers: { 'Authorization' => "Basic #{auth_token}" }, body: body)
+      raise Error, 'Bad request' if response.code != 200
+
       response.parsed_response
     end
 
     def auth_token
       auth_data = Rails.application.credentials.juno.slice(:client, :secret)
-      Base64.strict_encode64(auth_data[:client] + ':' + auth_data[:secret])
+      Base64.strict_encode64("#{auth_data[:client]}:#{auth_data[:secret]}")
     end
 
     def self.is_about_to_expire?(instance)
