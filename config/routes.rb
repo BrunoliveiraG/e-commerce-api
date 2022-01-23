@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       end
       resources :orders, only: [:index, :show]
       namespace :dashboard do
+        resources :sales_ranges, only: :index
         resources :summaries, only: :index
         resources :top_five_products, only: :index
       end
