@@ -19,6 +19,9 @@ Rails.application.routes.draw do
         resources :licenses
       end
       resources :orders, only: [:index, :show]
+      namespace :dashboard do
+        resources :summaries, only: :index
+      end
     end
   end
 
