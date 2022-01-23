@@ -21,6 +21,7 @@ module JunoApi
     def create!(order)
       auth_header = { 'Authorization' => "Bearer #{auth.access_token}" }
       body = prepare_create_body(order)
+      response = self.class.post("/", headers: auth_header, body: body.to_json)
       raise_error(response) if response.code != 200
       organize_response(response)
     end

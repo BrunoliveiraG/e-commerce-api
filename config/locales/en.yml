@@ -6,7 +6,7 @@ en:
       body: |
         Thank you for purchasing with us!
       billet_payment:
-        html: Your billet is in "%{billet_link}">this link =D
+        html: Your billet is in <a href="%{billet_link}">this link</a> =D
       credit_card_payment: |
         Payment succesfully processed, we will deliver your product momentarly
     generic_error:
