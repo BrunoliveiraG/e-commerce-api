@@ -1,11 +1,9 @@
-# frozen_string_literal: true
-
-require_relative '../../../libs/juno_api/charge'
-require_relative '../../../libs/juno_api/credit_card_payment'
+require_relative "../../../lib/juno_api/charge"
+require_relative "../../../lib/juno_api/credit_card_payment"
 
 module Juno
   class ChargeCreationService
-    PAYMENT_ERROR_CODES = %w[289999 509999].freeze
+    PAYMENT_ERROR_CODES = %W[289999 509999]
 
     def initialize(order)
       @order = order
@@ -37,6 +35,14 @@ module Juno
       @order.update!(status: :payment_accepted)
     end
 
+    def set_order_error(error)
+      if error.present? && PAYMENT_ERROR_CODES.include?(error.first['error_code'])
+        set_payment_denied_error(error.first['message'])
+      else
+        set_generic_error
+      end
+    end
+
     def create_charge(charge, position)
       charge.merge!(number: position)
       charge[:billet_url] = charge.delete(:installment_link)
@@ -48,14 +54,6 @@ module Juno
       charge = Juno::Charge.find_by(key: payment[:charge])
       payment.merge!(charge: charge)
       Juno::CreditCardPayment.create!(payment)
-    end
-
-    def set_order_error(error)
-      if error.present? && PAYMENT_ERROR_CODES.include?(error.first['error_code'])
-        set_payment_denied_error(error.first['message'])
-      else
-        set_generic_error
-      end
     end
 
     def set_payment_denied_error(message)

@@ -1,4 +1,0 @@
-en:
-  storefront/v1/coupon_validations:
-    create:
-      failure: Coupon can't be used

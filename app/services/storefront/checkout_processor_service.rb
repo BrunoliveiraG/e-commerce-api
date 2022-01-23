@@ -23,7 +23,7 @@ module Storefront
 
     def check_presence_of_items_param
       unless @params.key?(:items)
-        @errors[:items] = I18n.t('storefront/checkout_processor_service.errors.items.presence')
+        @errors[:items] = I18n.t('storefront/checkout_processor_service.errors.items.empty')
       end
     end
 

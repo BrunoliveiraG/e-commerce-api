@@ -8,7 +8,7 @@ module Storefront
         @coupon.validate_use!
         render :show
       rescue Coupon::InvalidUse, NoMethodError
-        render_error(message: I18n.t('storefront/v1/coupon_validations.create.failure'))
+        render_error(fields: @coupon.errors.messages)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../../../libs/juno_api/charge'
+require_relative '../../../lib/juno_api/charge'
 
 describe JunoApi::Charge do
   PAYMENT_TYPE = { 'billet' => 'BOLETO', 'credit_card' => 'CREDIT_CARD' }.freeze

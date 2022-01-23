@@ -46,7 +46,7 @@ if Rails.env.development? || Rails.env.test?
         user = create(:user)
         status = %i[available in_use inactive].sample
         platform = %i[steam battle_net origin].sample
-        create(:license, status: status, platform: platform, game_id: game.id, user_id: user.id)
+        create(:license, status: status, platform: platform, game_id: game.id)
       end
 
       10.times do

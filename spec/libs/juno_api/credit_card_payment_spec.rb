@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../../../libs/juno_api/credit_card_payment'
+require_relative "../../../lib/juno_api/credit_card_payment"
 
 describe JunoApi::CreditCardPayment do
   let!(:order) { create(:order) }

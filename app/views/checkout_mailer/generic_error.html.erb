@@ -1,4 +1,4 @@
-<h1><%= t('.title', order_number: params[:order].id) %></h1>
+<h1><%= I18n.t('checkout_mailer.generic_error.title', order_number: params[:order].id) %></h1>
 
 
-<p><%= t('.body.html') %></p>
+<p><%= I18n.t('checkout_mailer.generic_error.body.html') %></p>

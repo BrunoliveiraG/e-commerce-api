@@ -13,7 +13,6 @@ gem 'cpf_cnpj', '~>0.5.0'
 gem 'httparty', '~> 0.18.1'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.1'
-gem 'rack-cors', '~> 1.1.1'
 gem 'rubocop-rails', require: false
 gem 'rubocop-rspec'
 
