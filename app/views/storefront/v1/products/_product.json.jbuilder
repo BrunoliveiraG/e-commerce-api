@@ -7,4 +7,4 @@ json.productable product.productable_type.underscore
 json.productable_id product.productable_id
 json.categories product.categories
 json.wishlist_count product.wish_items.count
-json.sells_count 0
+json.sells_count product.sells_count

@@ -22,6 +22,13 @@ RSpec.describe LineItem, type: :model do
     expect(subject.total).to eq expected_value
   end
 
+  it "#ship! must forward to :productable #ship! method" do
+    line_item = create(:line_item)
+    productable = line_item.product.productable
+    expect(productable).to receive(:ship!).with(line_item)
+    line_item.ship!
+  end
+
   it "receives :waiting_order status as default on creation" do
     subject = create(:line_item, status: nil)
     expect(subject.status).to eq 'waiting_order'

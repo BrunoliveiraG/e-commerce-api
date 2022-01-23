@@ -1,4 +1,11 @@
 en:
+  license_mailer:
+    send_license:
+      subject: License released \o/
+      title: Your license was released
+      body: |
+        The license for the game %{game_name} that you bought is below. Copy and add
+        to your game platform
   checkout_mailer:
     success:
       subject: "Order #%{order_number} successful!"

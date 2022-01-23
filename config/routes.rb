@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
 
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
@@ -28,6 +29,7 @@ Rails.application.routes.draw do
       resources :checkouts, only: :create
       resources :wish_items, only: %i[index create destroy]
       post '/coupons/:coupon_code/validations', to: 'coupon_validations#create'
+      resources :orders, only: [:index, :show]
     end
   end
 

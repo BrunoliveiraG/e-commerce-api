@@ -17,7 +17,8 @@ gem 'rubocop-rails', require: false
 gem 'rubocop-rspec'
 
 # Delayed Jobs
-gem 'sidekiq', '~> 6.1.3'
+gem "sidekiq", '~> 6.1.3'
+gem "sidekiq-scheduler", '~> 3.0.1'
 
 # Auth
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'

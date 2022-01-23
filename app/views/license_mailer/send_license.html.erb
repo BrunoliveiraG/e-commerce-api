@@ -1,0 +1,3 @@
+<h1><%= I18n.t('license_mailer.send_license.title') %></h1>
+<p><%= I18n.t('license_mailer.send_license.body', game_name: params[:license].game.product.name) %></p>
+<p><%= params[:license].key %></p>
