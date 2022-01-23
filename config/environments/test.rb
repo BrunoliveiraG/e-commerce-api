@@ -8,6 +8,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.active_job.queue_adapter = :test
+
   config.cache_classes = false
   config.action_view.cache_template_loading = true
 
@@ -48,6 +50,8 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
+
+  config.active_job.queue_adapter = :test
 
   JUNO_AUTH_URL = "https://sandbox.boletobancario.com"
   JUNO_RESOURCE_URL = "https://sandbox.boletobancario.com/api-integration"

@@ -6,7 +6,7 @@ module JunoApi
     LIMIT_DATE_TO_RENEW = 90
     SECONDS_TO_WAIT_WHILE_PROCESSING = 0.5
 
-    base_uri = "#{JUNO_AUTH_URL}"
+    base_uri "#{JUNO_AUTH_URL}"
 
     attr_reader :access_token, :expires_in, :request_time
 

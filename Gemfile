@@ -15,6 +15,10 @@ gem 'rubocop-rails', require: false
 gem 'rubocop-rspec'
 gem 'cpf_cnpj', '~>0.5.0'
 gem 'httparty', '~> 0.18.1'
+gem 'rack-cors', '~> 1.1.1'
+
+# Delayed Jobs
+gem "sidekiq", '~> 6.1.3'
 
 # Auth
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth', branch: 'master'
