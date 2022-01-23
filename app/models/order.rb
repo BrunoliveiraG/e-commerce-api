@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
+  include Paginatable
+
   DAYS_TILL_DUE = 7
 
   attribute :address
