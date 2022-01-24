@@ -33,9 +33,10 @@ en:
 
           Please contact your credit card provider: %{message}
   storefront:
-    v1/coupon_validations:
-      create:
-        failure: Coupon can't be used
+    v1:
+      coupon_validations:
+        create:
+          failure: Coupon can't be used
     checkout_processor_service:
       errors:
         items:
